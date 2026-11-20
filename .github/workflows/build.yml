@@ -13,11 +13,9 @@ jobs:
         run: sudo apt-get install -y nasm
       - name: Build xdos
         run: |
-          cd tools && python3 mkassets.py && cd ..
-          nasm -f bin -Iinclude/ -Ikernel/ -Ikernel/apps/ -Ikernel/net/ -Iout/ kernel/kernel.asm -o out/kernel.bin
-          python3 tools/pack.py 2>&1 || true
-          # Run build.py but with NASM env override
-          NASM=/usr/bin/nasm python3 tools/build.py 2>&1 | tail -20
+          sed -i "s|NASM = os.path.expandvars(r'%LOCALAPPDATA%\\bin\\NASM\\nasm.exe')|NASM = '/usr/bin/nasm'|" tools/build.py
+          python3 tools/mkassets.py
+          python3 tools/build.py 2>&1 | tail -20
           ls -la out/os.img
       - name: Upload artifact
         uses: actions/upload-artifact@v4
