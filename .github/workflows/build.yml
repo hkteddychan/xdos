@@ -1,0 +1,24 @@
+name: Build xdos image
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install NASM
+        run: sudo apt-get install -y nasm
+      - name: Build xdos
+        run: |
+          python tools/mkassets.py
+          nasm -f bin -Iinclude/ -Ikernel/ -Ikernel/apps/ -Ikernel/net/ -Iout/ kernel/kernel.asm -o out/kernel.bin
+          python tools/build.py 2>&1 | tail -5
+          ls -la out/os.img
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xdos-image
+          path: out/os.img
