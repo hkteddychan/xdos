@@ -13,6 +13,7 @@ jobs:
         run: sudo apt-get install -y nasm
       - name: Build xdos
         run: |
+          mkdir -p out
           python3 tools/mkassets.py
           python3 tools/build.py 2>&1 | tail -20
           ls -la out/os.img
