@@ -5,7 +5,7 @@ import pack
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
-NASM = os.path.expandvars(r'%LOCALAPPDATA%\bin\NASM\nasm.exe')
+NASM = '/usr/bin/nasm'
 
 
 INC = ['-Iinclude/', '-Ikernel/', '-Ikernel/apps/', '-Ikernel/net/', '-Iout/']
